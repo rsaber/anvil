@@ -1,0 +1,3 @@
+template: base.jinja
+
+text: "Here is some text to be interpolated!"

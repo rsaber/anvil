@@ -1,0 +1,4 @@
+pages:
+  - contents/index.yaml
+copy:
+  - main.css
