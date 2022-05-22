@@ -83,7 +83,11 @@ class Anvil:
         template_path = loaded_page['template']
         template = self.environment.get_template(template_path)
 
-        rendered_html = template.render(**loaded_page)
+        rendered_html = template.render(
+            ANVIL_CURRENT_FILENAME=page_path,
+            ANVIL_FILENAME_MAPPINGS=self.page_name_mapping,
+            **loaded_page
+        )
         output_path_to_write_to = self.page_name_mapping[page_path]
         with open(f'{self.output_directory_path}/{output_path_to_write_to}', 'w') as output_file:
             output_file.write(rendered_html)
