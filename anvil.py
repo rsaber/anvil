@@ -58,6 +58,9 @@ class Anvil:
             self.page_name_mapping[page_path] = generate_output_page_path(page_path)
 
     def build(self):
+        for page_path in self.project['pages']:
+            self.render_page(page_path)
+
         for source in (self.project['copy'] if 'copy' in self.project else []):
             src = f'{self.project_base_path}/{source}'
             dst = f'{self.output_directory_path}/{source}'
@@ -69,8 +72,6 @@ class Anvil:
                 else:
                     raise
 
-        for page_path in self.project['pages']:
-            self.render_page(page_path)
 
     def render_page(self, page_path):
         with open(f'{self.project_base_path}/{page_path}', 'r') as raw_page:
