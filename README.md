@@ -45,7 +45,7 @@ Each input `yaml` page listed in the `pages` key of the `project.yaml` will be r
 # filename of template to use, all templates must be in my_project_directory/templates
 template: base.jinja
 
-# all the keys can be used in the template above during rendering
+# all the keys can be used in the template above during Jinja template generation 
 key_one: this is the first value
 key_two: this is the second value
 ```
@@ -57,7 +57,7 @@ As there is no notion of a file tree or website using anvil, only that one yaml 
 ```
 >>> headers.yaml <<<
 links:
-	Home: pages/index.yaml       # Anvil exports a handy function to convert this filename to the generated output path
+	Home: pages/index.yaml
 	About Me: pages/aboutme.yaml
 	Resume: pages/resume.yaml
 ```
@@ -66,15 +66,19 @@ links:
 >>> aboutme.yaml <<< 
 template: base.jinja
 
-headers: !include headers.yaml   # Every yaml page that would have a header would !include this
+headers: !include headers.yaml
 text: "Hey everyone, this is my about me page!"
 ```
 
 ```
 >>> base.jinja <<< 
 
-{% for title, link in headers.links %}
-	<a href="{{ anvil_link_for(link) }}">{{title}}</a>
+{% for label, link in headers.links.items() %}
+  {% if link == ANVIL_CURRENT_FILENAME %}
+		<a class="selected"">{{label}}</a>
+	{% else %}
+		<a href="{{ ANVIL_FILENAME_MAPPINGS.get(link) }}">{{label}}</a>
+	{% endif %}
 {% endfor %}
 ```
 
