@@ -8,13 +8,13 @@ anvil accepts a project directory file as an input, and an output build director
 
 ```
 my_project_directory/
-├─ templates/               # where Jinja2 Environment will look for templates
-├─ project.yaml             # defining what is to be compiled 
+├─ templates/    # where Jinja2 Environment will look for templates
+├─ project.yaml  # defining what is to be compiled 
 
 ```
 
 ```
-anvil my_project_directory build
+rm -rf build && mkdir build && python3 anvil.py my_project_directory -o build
 ```
 
 ## Structure of `project.yaml`
@@ -28,7 +28,7 @@ pages:
 	- my_file_name.yaml
 
 # 'copy' is an optional key
-# a list of files/directories to be copied to the output
+# a list of files/directories to be copied to the output after pages are rendered
 copy:
   - css
 	- fonts
