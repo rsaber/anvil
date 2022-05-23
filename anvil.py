@@ -22,8 +22,8 @@ Loader.add_constructor('!include', Loader.include)
 
 class Project():
     def validate(dictionary):
-        if 'pages' not in dictionary:
-            return "project requires 'pages' key"
+        if 'buildlist' not in dictionary:
+            return "project requires 'buildlist' key"
         return None
 
 class Page():
@@ -54,11 +54,11 @@ class Anvil:
             return f'{filename_without_extension}.html'
 
         self.page_name_mapping = {}
-        for page_path in self.project['pages']:
+        for page_path in self.project['buildlist']:
             self.page_name_mapping[page_path] = generate_output_page_path(page_path)
 
     def build(self):
-        for page_path in self.project['pages']:
+        for page_path in self.project['buildlist']:
             self.render_page(page_path)
 
         for source in (self.project['copy'] if 'copy' in self.project else []):
