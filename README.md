@@ -1,5 +1,15 @@
 # anvil 
 
+##### Kanban
+
+| To Do             | 
+|-------------------|
+| Add ability to serve static webpages locally, auto refresh on new build | 
+| File watcher will build broken web pages and throw exceptions mid build during compilation, keep a backup copy of build during -w | 
+| Catch exceptions, and print just the lowest level exception for YAML syntax errors |
+| -w mode rebuilds on every file system event, be smarter about this so a rebuild isn't as frequent | 
+| Builds with -c or -w clean the entire folder, with non -c or -w keep a hash of files to see what needs to be rebuilt | 
+
 Using just plain old `yaml` + `jinja2`, anvil aims to be as simple of a static site generator as possible. 
 
 ## Quick-start guide 
