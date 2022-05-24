@@ -23,23 +23,18 @@ Loader.add_constructor('!include', Loader.include)
 class Project():
     def validate(dictionary):
         if 'buildlist' not in dictionary:
-            return "project requires 'buildlist' key"
-        return None
+            raise "project requires 'buildlist' key"
 
 class Page():
     def validate(dictionary):
         if 'template' not in dictionary:
-            return "page requires 'template' key"
-        return None
+            raise "page requires 'template' key"
 
 class Anvil:
     def __init__(self, project_directory_path, output_directory_path):
         with open(f'{project_directory_path}/{DEFAULT_PROJECT_FILE_NAME}', 'r') as project:
             project = yaml.load(project, Loader) 
-            maybe_error = Project.validate(project)
-            if maybe_error is not None:
-                print(f'''{arguments.project_path}: error: {maybe_error}''')
-                sys.exit(1)
+            Project.validate(project)
 
         file_loader = jinja2.FileSystemLoader(f'{project_directory_path}/templates')
         self.environment = jinja2.Environment(loader=file_loader, extensions=['jinja_markdown.MarkdownExtension'])
@@ -76,10 +71,7 @@ class Anvil:
     def render_page(self, page_path):
         with open(f'{self.project_base_path}/{page_path}', 'r') as raw_page:
             loaded_page = yaml.load(raw_page, Loader)
-            maybe_error = Page.validate(loaded_page)
-            if maybe_error is not None:
-                print(f'''{page_path}: error: {maybe_error}''')
-                sys.exit(1)
+            Page.validate(loaded_page)
 
         template_path = loaded_page['template']
         template = self.environment.get_template(template_path)
