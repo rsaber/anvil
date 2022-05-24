@@ -5,6 +5,7 @@ import yaml
 import jinja2
 import shutil
 import errno
+import glob
 
 DEFAULT_PROJECT_FILE_NAME = "project.yaml"
 
@@ -37,11 +38,15 @@ class Anvil:
             Project.validate(project)
 
         if is_force:
-            try:
-                shutil.rmtree(output_directory_path)
-            except FileNotFoundError:
-                pass
-            os.makedirs(output_directory_path)
+            if os.path.isdir(output_directory_path):
+                files = glob.glob(f'{output_directory_path}/*')
+                for f in files:
+                    try:
+                        shutil.rmtree(f)
+                    except NotADirectoryError:
+                        os.remove(f)
+            else:
+                os.makedirs(output_directory_path)
 
         file_loader = jinja2.FileSystemLoader(f'{project_directory_path}/templates')
         self.environment = jinja2.Environment(loader=file_loader, extensions=['jinja_markdown.MarkdownExtension'])
