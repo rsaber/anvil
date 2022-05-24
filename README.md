@@ -14,7 +14,15 @@ my_project_directory/
 ```
 
 ```
-rm -rf build && mkdir build && python3 anvil.py my_project_directory -o build
+python3 anvil.py my_project_directory --clean --output build
+```
+
+Note that `--clean` will remove the contents of the build directory before rebuilding (anything that matches "*" glob).
+
+Alternatively, Anvil can be set to watch changes in a directory and rebuild entirely upon any file system event.
+
+```
+python3 anvil.py my_project_directory --watch --output build
 ```
 
 ## Structure of `project.yaml`
@@ -22,9 +30,9 @@ rm -rf build && mkdir build && python3 anvil.py my_project_directory -o build
 ```
 >>> project.yaml <<<
 
-# 'pages' is a required key 
-# indicates the relative path of all yaml files to be converted into HTML
-pages: 
+# 'buildlist' is a required key 
+# indicates the relative path (relative to project directory) of all yaml files to be converted into HTML
+buildlist: 
 	- my_file_name.yaml
 
 # 'copy' is an optional key
@@ -36,7 +44,7 @@ copy:
 
 ## `yaml` page
 
-Each input `yaml` page listed in the `pages` key of the `project.yaml` will be rendered into a `html` output. 
+Each input `yaml` page listed in the `buildlist` key of the `project.yaml` will be rendered into a `html` output. 
 
 ```
 >>> my_file_name.yaml <<<
@@ -52,7 +60,20 @@ key_two: this is the second value
 
 ## Advanced Examples 
 
-As there is no notion of a file tree or website using anvil, only that one yaml file gets built into one html file, we must use non-standard YAML (like !include) to build functional websites. 
+As there is no notion of a file tree or website using anvil, only that one yaml file gets built into one html file, we must use non-standard YAML (like !include) to build functional websites. Below is an example illustrating advanced features.
+
+```
+>>> Directory Structure <<<
+
+my_advanced_project/
+├─ templates/
+	 - base.jinja
+├─ pages/
+	 - headers.yaml
+	 - aboutme.yaml
+├─ project.yaml 
+
+```
 
 ```
 >>> headers.yaml <<<
@@ -81,6 +102,3 @@ text: "Hey everyone, this is my about me page!"
 	{% endif %}
 {% endfor %}
 ```
-
-
-
