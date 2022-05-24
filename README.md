@@ -9,6 +9,7 @@
 | Catch exceptions, and print just the lowest level exception for YAML syntax errors |
 | -w mode rebuilds on every file system event, be smarter about this so a rebuild isn't as frequent | 
 | Builds with -c or -w clean the entire folder, with non -c or -w keep a hash of files to see what needs to be rebuilt | 
+| Add post-processing steps, eg: minify HTML, run bash commands on output files etc |
 
 Using just plain old `yaml` + `jinja2`, anvil aims to be as simple of a static site generator as possible. 
 
