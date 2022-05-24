@@ -31,10 +31,17 @@ class Page():
             raise "page requires 'template' key"
 
 class Anvil:
-    def __init__(self, project_directory_path, output_directory_path):
+    def __init__(self, project_directory_path, output_directory_path, is_force):
         with open(f'{project_directory_path}/{DEFAULT_PROJECT_FILE_NAME}', 'r') as project:
             project = yaml.load(project, Loader) 
             Project.validate(project)
+
+        if is_force:
+            try:
+                shutil.rmtree(output_directory_path)
+            except FileNotFoundError:
+                pass
+            os.makedirs(output_directory_path)
 
         file_loader = jinja2.FileSystemLoader(f'{project_directory_path}/templates')
         self.environment = jinja2.Environment(loader=file_loader, extensions=['jinja_markdown.MarkdownExtension'])
@@ -89,9 +96,10 @@ def main():
     parser = argparse.ArgumentParser(description="A really simple static site generator")
     parser.add_argument("project_path", help="Path to project file")
     parser.add_argument("-o", "--output", help="Output directory")
+    parser.add_argument("-f", "--force", action="store_true", help="Overwrite build directory")
     arguments = parser.parse_args(sys.argv[1:])
 
-    anvil = Anvil(arguments.project_path, arguments.output) 
+    anvil = Anvil(arguments.project_path, arguments.output, arguments.force) 
     anvil.build()
 
 if __name__ == "__main__":
